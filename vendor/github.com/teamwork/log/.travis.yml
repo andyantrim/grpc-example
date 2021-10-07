@@ -1,0 +1,27 @@
+sudo: required
+dist: trusty
+language: go
+go:
+  - 1.14.x
+go_import_path: github.com/teamwork/log
+notifications:
+  email: false
+  webhooks: https://tw-bot.eu.teamworkops.com/travis/buildstatus
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/gopath/bin
+
+install: |
+  sudo git config --system url."ssh://git@github.com/".insteadOf "https://github.com/"
+  ./bin/setup-travis
+
+script: |
+  set -e
+  cd $HOME/gopath/src/github.com/teamwork/log
+  [ -f go.sum ] && export GO111MODULE=on ||:
+  ./bin/coverage -race ./...
+  ./bin/lint ./...
+
+before_cache: |
+  rm -f "$HOME/.cache/go-build/log.txt"

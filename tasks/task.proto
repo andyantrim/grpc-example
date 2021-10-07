@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/andyantrim/grpc_example/tasks";
+
+package task;
+
+service Tasks {
+    rpc Create(TaskRequest) returns (TaskResponse) {}
+}
+
+message TaskRequest {
+    string title = 1;
+    string description = 2;
+}
+
+message TaskResponse {
+    int64 id = 1;
+}
